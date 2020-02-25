@@ -46,4 +46,19 @@ router.post("/login", (req, res) => {
     });
 });
 
+router.get("/logout", (req, res) => {
+  if (req.session) {
+    req.session.destroy(error => {
+      if (error) {
+        res.status(500).json({ you: "CANNOT LEAVE!" });
+      } else {
+        res.status(200).json({ you: "logged out successfully!" });
+      }
+    }); // destroy() will accept one parameter
+  } else {
+    res.end();
+    // or res.status(200).json({ bye: "felicia" })
+  }
+});
+
 module.exports = router;
