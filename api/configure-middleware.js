@@ -2,6 +2,9 @@ const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
 const session = require("express-session");
+const KnexStore = require("connect-session-knex")(session); // remember to curry and pass the session
+
+const knex = require("../database/dbConfig.js");
 
 const sessionConfig = {
   name: "session-cookie",
@@ -14,7 +17,10 @@ const sessionConfig = {
     maxAge: 1000 * 60 * 10,
     secure: false, // should be true in production
     httpOnly: true // true means JS can't touch the cookie - important because browser extensions run on JS, so we don't want vulnerabilities to be introduced by allowing JS to interact with the cookie
-  }
+  },
+  store: new KnexStore({
+    // this library sits between the session library and whatever storage mechanism I'm using
+  })
 };
 
 module.exports = server => {

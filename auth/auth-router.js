@@ -33,6 +33,7 @@ router.post("/login", (req, res) => {
     .then(user => {
       if (user && bcrypt.compareSync(password, user.password)) {
         req.session.loggedIn = true; // stored in session - this is the only time .loggedIn should be touched
+        req.session.username = user.username; // now the username can be accessed in the session memory
         res
           .status(200)
           .json({ message: `You are logged in, ${user.username}!` });
