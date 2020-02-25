@@ -32,6 +32,7 @@ router.post("/login", (req, res) => {
     .first()
     .then(user => {
       if (user && bcrypt.compareSync(password, user.password)) {
+        req.session.loggedIn = true; // stored in session - this is the only time .loggedIn should be touched
         res
           .status(200)
           .json({ message: `You are logged in, ${user.username}!` });
@@ -40,7 +41,7 @@ router.post("/login", (req, res) => {
       }
     })
     .catch(error => {
-      res.status(500).json(error);
+      res.status(500).json({ error: "Error logging in" });
     });
 });
 
